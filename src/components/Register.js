@@ -4,11 +4,14 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Stack from 'react-bootstrap/Stack';
+import Alert from 'react-bootstrap/Alert'
 
 const Register = ({show, onHide, authToken, setAuthToken, username, setUsername, BASE_URL }) => {
 
     const [newUsername, setNewUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [alertShow, setAlertShow] = useState(false)
+    const [errorText, setErrorText] = useState('')
 
     const handleUsername = (e) => {
         setNewUsername(e.target.value);
@@ -20,6 +23,7 @@ const Register = ({show, onHide, authToken, setAuthToken, username, setUsername,
 
     const handleSubmit= async (e) => {
         e.preventDefault();
+        setAlertShow(false);
 
         try {
             const response = await fetch(`${BASE_URL}users/register`, {
@@ -39,8 +43,9 @@ const Register = ({show, onHide, authToken, setAuthToken, username, setUsername,
                 window.localStorage.setItem('ft-token', json.token)
                 window.localStorage.setItem('ft-username', json.user.username)
                 onHide();
-            } else {
-                // setRegResponse(json.error);
+            } else if(json.error) {
+                setErrorText(json.message)
+                setAlertShow(true)
                 console.log(json)
             }
         } catch (error) {
@@ -81,6 +86,7 @@ const Register = ({show, onHide, authToken, setAuthToken, username, setUsername,
                             onChange={handlePassword}
                         />
                     </Form.Group>
+                    {alertShow ? <Alert variant='danger'>{errorText}</Alert> : null}
                     <Stack direction="horizontal" gap={2}>
                         <Button variant="outline-primary ms-auto" onClick={onHide}>Close</Button>
                         <Button variant="primary" type="submit">

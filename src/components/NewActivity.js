@@ -4,11 +4,14 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Stack from 'react-bootstrap/Stack';
+import Alert from 'react-bootstrap/Alert'
 
 const NewActivity = ({show, onHide, authToken, BASE_URL, getActivities }) => {
 
     const [activityName, setActivityName] = useState('')
     const [activityDescription, setActivityDescription] = useState('')
+    const [alertShow, setAlertShow] = useState(false)
+    const [errorText, setErrorText] = useState('')
 
     const handleActivityName = (e) => {
         setActivityName(e.target.value);
@@ -39,8 +42,9 @@ const NewActivity = ({show, onHide, authToken, BASE_URL, getActivities }) => {
                 setActivityName('')
                 setActivityDescription('')
                 onHide();
-            } else {
-                // setRegResponse(json.error);
+            } else if(json.error) {
+                setErrorText(json.message)
+                setAlertShow(true)
                 console.log(json)
             }
         } catch (error) {
@@ -81,6 +85,7 @@ const NewActivity = ({show, onHide, authToken, BASE_URL, getActivities }) => {
                             onChange={handleActivityDescription}
                         />
                     </Form.Group>
+                    {alertShow ? <Alert variant='danger'>{errorText}</Alert> : null}
                     <Stack direction="horizontal" gap={2}>
                         <Button variant="outline-primary ms-auto" onClick={onHide}>Cancel</Button>
                         <Button variant="primary" type="submit">

@@ -6,3 +6,5 @@ export {default as NewActivity} from './NewActivity';
 export {default as NewRoutine} from './NewRoutine';
 export {default as EditRoutine} from './EditRoutine';
 export {default as MyRoutineCard} from './MyRoutineCard';
+export {default as AddRoutineActivity} from './AddRoutineActivity';
+export {default as EditRoutineActivity} from './EditRoutineActivity'

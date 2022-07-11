@@ -38,6 +38,7 @@ const MyRoutines = ({BASE_URL, authToken, username}) => {
             navigate('/')
         }
         getMyRoutines();
+        console.log(routines);
     }, []);
 
     return (

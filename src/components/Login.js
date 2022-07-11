@@ -4,11 +4,14 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Stack from 'react-bootstrap/Stack';
+import Alert from 'react-bootstrap/Alert';
 
 const Login = ({show, onHide, authToken, setAuthToken, username, setUsername, BASE_URL }) => {
 
     const [newUsername, setNewUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [alertShow, setAlertShow] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
 
     const handleUsername = (e) => {
         setNewUsername(e.target.value);
@@ -40,7 +43,8 @@ const Login = ({show, onHide, authToken, setAuthToken, username, setUsername, BA
                 window.localStorage.setItem('ft-username', json.user.username)
                 onHide();
             } else {
-                // setRegResponse(json.error);
+                setErrorMessage(json.message)
+                setAlertShow(true)
                 console.log(json)
             }
         } catch (error) {
@@ -81,6 +85,7 @@ const Login = ({show, onHide, authToken, setAuthToken, username, setUsername, BA
                             onChange={handlePassword}
                         />
                     </Form.Group>
+                    {alertShow ? <Alert variant='danger'>{errorMessage}</Alert> : null}
                     <Stack direction="horizontal" gap={2}>
                         <Button variant="outline-primary ms-auto" onClick={onHide}>Close</Button>
                         <Button variant="primary" type="submit">
